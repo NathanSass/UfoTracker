@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ufos.ufotracker.SightingData
+import com.ufos.ufotracker.UfoType
 import com.ufos.ufotracker.databinding.FragmentMainBinding
+import com.ufos.ufotracker.databinding.SightningRowItemBinding
 
 /**
  * A placeholder fragment containing a simple view.
@@ -27,14 +31,14 @@ class UfoModulesFragment : Fragment() {
         }
     }
 
-    private val pageViewModel: PageViewModel by viewModels()
+    private val viewModel: UfoModulesViewModel by viewModels()
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel.setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
+        viewModel.setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
     }
 
     override fun onCreateView(
@@ -44,11 +48,29 @@ class UfoModulesFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
 
-        val textView: TextView = binding.sectionLabel
-        pageViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
-        })
+        //        val textView: TextView = binding.sectionLabel
+        //        viewModel.text.observe(viewLifecycleOwner, {
+        //            textView.text = it
+        //        })
         return root
+    }
+
+    private lateinit var sightingAdapter: SightingAdapter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        sightingAdapter = SightingAdapter()
+        binding.recyclerView.apply {
+            adapter = sightingAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+
+        val datas = "askdhsakdukhbjhwbewewesdfsdfsdffsdfsdf".split("").map {
+            val speed = (0..100).random()
+            SightingData(it, speed, UfoType.Blob)
+        }
+        sightingAdapter.items = datas
     }
 
     override fun onDestroyView() {
@@ -56,3 +78,28 @@ class UfoModulesFragment : Fragment() {
         _binding = null
     }
 }
+
+class SightingsVH(binding: SightningRowItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    val sightingUi = binding.sightingRowItem
+}
+
+class SightingAdapter() : RecyclerView.Adapter<SightingsVH>() {
+    var items: List<SightingData> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged() // TODO: use better diff strategy
+        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SightingsVH {
+        val binding = SightningRowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SightingsVH((binding))
+    }
+
+    override fun onBindViewHolder(holder: SightingsVH, position: Int) {
+        val data = items[position]
+        holder.sightingUi.setTitle("$position ${data.timestamp}")
+    }
+
+    override fun getItemCount() = items.size
+}
+
