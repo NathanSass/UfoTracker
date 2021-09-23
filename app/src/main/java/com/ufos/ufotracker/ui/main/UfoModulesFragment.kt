@@ -1,13 +1,17 @@
 package com.ufos.ufotracker.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ufos.ufotracker.R
 import com.ufos.ufotracker.SightingData
 import com.ufos.ufotracker.UfoType
 import com.ufos.ufotracker.databinding.FragmentMainBinding
@@ -64,11 +68,13 @@ class UfoModulesFragment : Fragment() {
         binding.recyclerView.apply {
             adapter = sightingAdapter
             layoutManager = LinearLayoutManager(context)
+            addItemDecoration(AlienSightingsDecorator(context))
         }
 
         val datas = "askdhsakdukhbjhwbewewesdfsdfsdffsdfsdf".split("").map {
             val speed = (0..100).random()
-            SightingData(it, speed, UfoType.Blob)
+            val icon = listOf(UfoType.Lampshade, UfoType.Blob, UfoType.MysteriousLights).random()
+            SightingData(it, speed, icon)
         }
         sightingAdapter.items = datas
     }
@@ -98,8 +104,15 @@ class SightingAdapter() : RecyclerView.Adapter<SightingsVH>() {
     override fun onBindViewHolder(holder: SightingsVH, position: Int) {
         val data = items[position]
         holder.sightingUi.setTitle("$position ${data.timestamp}")
+        holder.sightingUi.setImage(data.type)
     }
 
     override fun getItemCount() = items.size
+}
+
+class AlienSightingsDecorator(context: Context) : DividerItemDecoration(context, VERTICAL) {
+    init {
+        setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_line)!!)
+    }
 }
 
