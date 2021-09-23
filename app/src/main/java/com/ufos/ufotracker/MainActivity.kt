@@ -1,15 +1,12 @@
 package com.ufos.ufotracker
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import com.ufos.ufotracker.ui.main.SectionsPagerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import com.ufos.ufotracker.databinding.ActivityMainBinding
+import com.ufos.ufotracker.ui.main.SectionsPagerAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,11 +18,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = binding.viewPager
+        val sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, lifecycle)
+        val viewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = binding.tabs
-        tabs.setupWithViewPager(viewPager)
+
+        val TAB_TITLES = listOf("Tab 1", "Tab 2")
+
+        TabLayoutMediator(binding.tabs, viewPager) { tab, position ->
+            tab.text = TAB_TITLES[position]
+        }.attach()
+
         val fab: FloatingActionButton = binding.fab
 
         fab.setOnClickListener { view ->
