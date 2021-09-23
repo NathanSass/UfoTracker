@@ -2,11 +2,13 @@ package com.ufos.ufotracker
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ufos.ufotracker.databinding.ActivityMainBinding
-import com.ufos.ufotracker.ui.main.SectionsPagerAdapter
+import com.ufos.ufotracker.ui.main.UfoModulesFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,17 +24,25 @@ class MainActivity : AppCompatActivity() {
         val viewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
 
-        val TAB_TITLES = listOf("Tab 1", "Tab 2")
-
         TabLayoutMediator(binding.tabs, viewPager) { tab, position ->
-            tab.text = TAB_TITLES[position]
+            tab.text = listOf("STRANGE FLYERS", "MYSTERIOUS LIGHTS")[position]
         }.attach()
 
-        val fab: FloatingActionButton = binding.fab
+        // add listener for add button
+        // open up new fragment for form data
+        // accept data from form data, and disseminate to viewmodel
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+    }
+}
+
+class SectionsPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle)
+    : FragmentStateAdapter(fm, lifecycle) {
+
+    override fun getItemCount(): Int {
+        return 2
+    }
+
+    override fun createFragment(position: Int): Fragment {
+        return UfoModulesFragment.newInstance(position + 1)
     }
 }
