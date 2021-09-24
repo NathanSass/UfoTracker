@@ -8,21 +8,36 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.ufos.ufotracker.databinding.SightingUiElementBinding
-import java.time.Instant
-import java.util.Calendar
-import java.util.Calendar.DAY_OF_MONTH
 
 class SightingUi @kotlin.jvm.JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
     private val binding = SightingUiElementBinding.inflate(LayoutInflater.from(context), this)
 
+    init {
+        this.setOnLongClickListener {
+            toggleState()
+            return@setOnLongClickListener true
+        }
+    }
+
+    // might be better to keep this kind of logic outside the custom view
     private val typeToImage = mapOf(
         UfoType.BLOB to R.drawable.ic_blob_small,
         UfoType.LAMPSHADE to R.drawable.ic_ufo_small,
         UfoType.MYSTERIOUS_LIGHTS to R.drawable.ic_lights_small
     )
 
-    fun setTitle(title: String) {
-        binding.title.text = title
+    private enum class State {
+        VIEW, DELETE
+    }
+
+    private var currentState = State.VIEW
+
+    fun setTitle(text: String) {
+        binding.title.text = text
+    }
+
+    fun setSubtitle(text: String) {
+        binding.subtitle.text = text
     }
 
     fun setImage(type: UfoType) {
@@ -30,6 +45,22 @@ class SightingUi @kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
 
         val drawable = colorDrawable(res)
         binding.image.background = drawable
+    }
+
+    fun setOnDeleteButtonListener(onClick: () -> Unit) {
+        binding.deleteButton.setOnClickListener {
+            onClick.invoke()
+        }
+    }
+
+    private fun toggleState() {
+        if (currentState == State.VIEW) {
+            binding.deleteButton.visibility = VISIBLE
+            currentState = State.DELETE
+        } else {
+            binding.deleteButton.visibility = GONE
+            currentState = State.VIEW
+        }
     }
 
     private fun colorDrawable(drawableId: Int): Drawable {

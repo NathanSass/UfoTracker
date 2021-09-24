@@ -1,8 +1,19 @@
 package com.ufos.ufotracker
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import java.util.Calendar
 
-object Seeds {
+object Repository {
+    private val _sightingData = MutableLiveData<List<SightingData>>()
+    val sightingData: LiveData<List<SightingData>> = _sightingData
+
+    fun fetchData() {
+        _sightingData.value = Seeds.getSeeds(50)
+    }
+}
+
+private object Seeds {
     private fun getDate(): String {
         val year = (1990 until 2021).random()
         val month = (1..12).random()

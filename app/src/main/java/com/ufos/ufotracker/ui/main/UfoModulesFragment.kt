@@ -2,6 +2,7 @@ package com.ufos.ufotracker.ui.main
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +60,12 @@ class UfoModulesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sightingAdapter = SightingAdapter()
+        sightingAdapter = SightingAdapter(
+            onItemRemoved = { position, item ->
+                Log.v("NATHAN", "removed")
+            }
+        )
+
         binding.recyclerView.apply {
             adapter = sightingAdapter
             layoutManager = LinearLayoutManager(context)
@@ -83,7 +89,9 @@ class SightingsVH(binding: SightningRowItemBinding) : RecyclerView.ViewHolder(bi
     val sightingUi = binding.sightingRowItem
 }
 
-class SightingAdapter() : RecyclerView.Adapter<SightingsVH>() {
+class SightingAdapter(
+    private val onItemRemoved: (Int, SightingData) -> Unit
+) : RecyclerView.Adapter<SightingsVH>() {
     var items: List<SightingData> = emptyList()
         set(value) {
             field = value
@@ -102,6 +110,13 @@ class SightingAdapter() : RecyclerView.Adapter<SightingsVH>() {
             setTitle(timeDisplayStr)
             val type = UfoType.values().first { it.type == data.type }
             setImage(type)
+
+            val subtitleText = "${data.speedKnots} knots · ${type.displayString}"
+            setSubtitle(subtitleText)
+
+            setOnDeleteButtonListener {
+                onItemRemoved(position, data)
+            }
         }
     }
 

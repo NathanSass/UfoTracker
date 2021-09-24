@@ -28,10 +28,7 @@ class MainActivity : AppCompatActivity() {
             tab.text = listOf("STRANGE FLYERS", "MYSTERIOUS LIGHTS")[position]
         }.attach()
 
-        // add listener for add button
-        // open up new fragment for form data
-        // accept data from form data, and disseminate to viewmodel
-
+        Repository.fetchData()
     }
 }
 
