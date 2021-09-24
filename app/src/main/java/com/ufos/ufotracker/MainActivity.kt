@@ -14,10 +14,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
-    companion object {
-        val TABS = listOf("STRANGE FLYERS", "MYSTERIOUS LIGHTS")
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,25 +25,26 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
 
         TabLayoutMediator(binding.tabs, viewPager) { tab, position ->
-            tab.text = TABS[position]
+            tab.text = TABS_TITLES[position]
         }.attach()
 
         Repository.fetchData()
     }
 }
 
+val TABS_TITLES = listOf("STRANGE FLYERS", "MYSTERIOUS LIGHTS")
+val TAB_1_TYPES = listOf(UfoType.BLOB, UfoType.LAMPSHADE).map { it.type }
+val TAB_2_TYPES = listOf(UfoType.MYSTERIOUS_LIGHTS).map { it.type }
+val TAB_TYPES = listOf(TAB_1_TYPES, TAB_2_TYPES)
+
 class SectionsPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle)
     : FragmentStateAdapter(fm, lifecycle) {
 
-    private val tab1Types = listOf(UfoType.BLOB, UfoType.LAMPSHADE).map { it.type }
-    private val tab2Types = listOf(UfoType.MYSTERIOUS_LIGHTS).map { it.type }
-    private val tabTypes = listOf(tab1Types, tab2Types)
-
     override fun getItemCount(): Int {
-        return MainActivity.TABS.size
+        return TABS_TITLES.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        return UfoModulesFragment.newInstance(tabTypes[position])
+        return UfoModulesFragment.newInstance(TAB_TYPES[position])
     }
 }

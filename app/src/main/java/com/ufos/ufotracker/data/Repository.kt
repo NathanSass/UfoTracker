@@ -9,21 +9,27 @@ object Repository {
     val sightingData: LiveData<List<SightingData>> = _sightingData
 
     fun fetchData() {
-        _sightingData.value = Seeds.getSeeds(50)
+        _sightingData.value = Seeds.generateSeeds(10)
     }
 
     fun addNewSighting(type: String) {
-        val data = Seeds.getRandomSightingData().copy(
+        val data = Seeds.generateSeed().copy(
             type = type
         )
         val datas = _sightingData.value?.toMutableList() ?: mutableListOf()
         datas.add(0, data)
         _sightingData.value = datas
     }
+
+    fun removeSighting(data: SightingData) {
+        val datas = _sightingData.value?.toMutableList() ?: mutableListOf()
+        datas.remove(data)
+        _sightingData.value = datas
+    }
 }
 
 private object Seeds {
-    private fun getDate(): String {
+    private fun generateTimestamp(): String {
         val year = (1990 until 2021).random()
         val month = (1..12).random()
         val day = (1..30).random()
@@ -37,16 +43,16 @@ private object Seeds {
         return time.toString()
     }
 
-    fun getRandomSightingData(): SightingData {
+    fun generateSeed(): SightingData {
         val speed = (1..100000).random()
         val type = UfoType.values().random().type
-        return SightingData(getDate(), speed, type)
+        return SightingData(generateTimestamp(), speed, type)
     }
 
-    fun getSeeds(count: Int): List<SightingData> {
+    fun generateSeeds(count: Int): List<SightingData> {
         val datas = mutableListOf<SightingData>()
         repeat(count) {
-            datas.add(getRandomSightingData())
+            datas.add(generateSeed())
         }
         return datas
     }

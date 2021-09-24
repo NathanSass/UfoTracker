@@ -64,7 +64,7 @@ class UfoModulesFragment : Fragment() {
 
         sightingAdapter = SightingAdapter(
             onItemRemoved = { position, item ->
-                Log.v("NATHAN", "removed")
+               viewModel.removeRecord(item)
             }
         )
 
@@ -83,6 +83,7 @@ class UfoModulesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        // this is from activity and shared by fragments so it needs to be reattached each time
         (activity as MainActivity).binding.addButton.setOnClickListener {
             viewModel.addNewRecord()
         }
