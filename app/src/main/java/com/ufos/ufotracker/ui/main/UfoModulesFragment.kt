@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ufos.ufotracker.R
 import com.ufos.ufotracker.SightingData
 import com.ufos.ufotracker.UfoType
+import com.ufos.ufotracker.Util
 import com.ufos.ufotracker.databinding.FragmentMainBinding
 import com.ufos.ufotracker.databinding.SightningRowItemBinding
 
@@ -23,26 +24,26 @@ import com.ufos.ufotracker.databinding.SightningRowItemBinding
 class UfoModulesFragment : Fragment() {
 
     companion object {
-        private const val ARG_SECTION_NUMBER = "section_number"
+        private const val ARG_SIGHTINGS_LIST = "key_sightings_list"
 
         @JvmStatic
-        fun newInstance(sectionNumber: Int): UfoModulesFragment {
+        fun newInstance(sightingTypes: List<String>): UfoModulesFragment {
             return UfoModulesFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_SECTION_NUMBER, sectionNumber)
+                    putStringArrayList(ARG_SIGHTINGS_LIST, ArrayList(sightingTypes))
                 }
             }
         }
     }
 
     private val viewModel: UfoModulesViewModel by viewModels()
-
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
+        val sightingTypes = arguments?.getStringArrayList(ARG_SIGHTINGS_LIST)?.toList() ?: emptyList()
+        viewModel.sightingTypes = sightingTypes
     }
 
     override fun onCreateView(
@@ -50,13 +51,7 @@ class UfoModulesFragment : Fragment() {
         savedInstanceState: Bundle?): View {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        val root = binding.root
-
-        //        val textView: TextView = binding.sectionLabel
-        //        viewModel.text.observe(viewLifecycleOwner, {
-        //            textView.text = it
-        //        })
-        return root
+        return binding.root
     }
 
     private lateinit var sightingAdapter: SightingAdapter
@@ -71,12 +66,11 @@ class UfoModulesFragment : Fragment() {
             addItemDecoration(AlienSightingsDecorator(context))
         }
 
-        val datas = "askdhsakdukhbjhwbewewesdfsdfsdffsdfsdf".split("").map {
-            val speed = (0..100).random()
-            val icon = listOf(UfoType.Lampshade, UfoType.Blob, UfoType.MysteriousLights).random()
-            SightingData(it, speed, icon)
-        }
-        sightingAdapter.items = datas
+        viewModel.requestData()
+
+        viewModel.sightingsLiveData.observe(viewLifecycleOwner, {
+            sightingAdapter.items = it
+        })
     }
 
     override fun onDestroyView() {
@@ -103,8 +97,12 @@ class SightingAdapter() : RecyclerView.Adapter<SightingsVH>() {
 
     override fun onBindViewHolder(holder: SightingsVH, position: Int) {
         val data = items[position]
-        holder.sightingUi.setTitle("$position ${data.timestamp}")
-        holder.sightingUi.setImage(data.type)
+        holder.sightingUi.apply {
+            val timeDisplayStr = Util.getDateString(data.timestamp)
+            setTitle(timeDisplayStr)
+            val type = UfoType.values().first { it.type == data.type }
+            setImage(type)
+        }
     }
 
     override fun getItemCount() = items.size

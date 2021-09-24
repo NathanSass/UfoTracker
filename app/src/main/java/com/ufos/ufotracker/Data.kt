@@ -1,9 +1,9 @@
 package com.ufos.ufotracker
 
-data class SightingData(val timestamp: String, val speedKnots: Int, val type: UfoType)
+data class SightingData(val timestamp: String, val speedKnots: Int, val type: String)
 
-sealed class UfoType(val type: String) {
-    object Blob : UfoType("blob")
-    object Lampshade : UfoType("lampshade")
-    object MysteriousLights : UfoType("mysteriousLights")
+enum class UfoType(val type: String) {
+    BLOB("blob"),
+    LAMPSHADE("lampshade"),
+    MYSTERIOUS_LIGHTS("mysteriousLights")
 }

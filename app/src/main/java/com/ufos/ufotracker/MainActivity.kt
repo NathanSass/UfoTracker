@@ -38,11 +38,14 @@ class MainActivity : AppCompatActivity() {
 class SectionsPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle)
     : FragmentStateAdapter(fm, lifecycle) {
 
+    private val tab1Types = listOf(UfoType.BLOB, UfoType.LAMPSHADE).map { it.type }
+    private val tab2Types = listOf(UfoType.MYSTERIOUS_LIGHTS).map { it.type }
+    private val tabTypes = listOf(tab1Types, tab2Types)
     override fun getItemCount(): Int {
         return 2
     }
 
     override fun createFragment(position: Int): Fragment {
-        return UfoModulesFragment.newInstance(position + 1)
+        return UfoModulesFragment.newInstance(tabTypes[position])
     }
 }
