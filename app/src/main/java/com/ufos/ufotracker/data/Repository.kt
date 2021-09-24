@@ -1,9 +1,12 @@
-package com.ufos.ufotracker
+package com.ufos.ufotracker.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.Calendar
 
+/**
+ * Class for managing data adding / deletion. Interested classes should subscribe to [Repository.sightingData]
+ */
 object Repository {
     private val _sightingData = MutableLiveData<List<SightingData>>()
     val sightingData: LiveData<List<SightingData>> = _sightingData
@@ -28,6 +31,9 @@ object Repository {
     }
 }
 
+/**
+ * Class for managing creating random sightings
+ */
 private object Seeds {
     private fun generateTimestamp(): String {
         val year = (1990 until 2021).random()

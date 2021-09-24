@@ -7,8 +7,14 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import com.ufos.ufotracker.data.UfoType
 import com.ufos.ufotracker.databinding.SightingUiElementBinding
 
+/**
+ * Custom view for managing the display of a sighting
+ *
+ * TODO: remove state from view.
+ */
 class SightingUi @kotlin.jvm.JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
     private val binding = SightingUiElementBinding.inflate(LayoutInflater.from(context), this)
 

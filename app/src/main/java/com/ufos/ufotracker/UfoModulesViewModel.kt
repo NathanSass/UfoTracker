@@ -2,6 +2,8 @@ package com.ufos.ufotracker
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ufos.ufotracker.data.Repository
+import com.ufos.ufotracker.data.SightingData
 
 class UfoModulesViewModel : ViewModel() {
 
@@ -9,7 +11,7 @@ class UfoModulesViewModel : ViewModel() {
 
     var sightingTypes: List<String> = emptyList()
 
-    val repo = Repository
+    private val repo = Repository
 
     fun subscribeToData() {
         // TODO: need to unsubscribe when vm destroyed

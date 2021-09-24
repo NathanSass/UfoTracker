@@ -2,7 +2,6 @@ package com.ufos.ufotracker.ui.main
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ufos.ufotracker.MainActivity
 import com.ufos.ufotracker.R
-import com.ufos.ufotracker.SightingData
+import com.ufos.ufotracker.data.SightingData
 import com.ufos.ufotracker.UfoModulesViewModel
-import com.ufos.ufotracker.UfoType
+import com.ufos.ufotracker.data.UfoType
 import com.ufos.ufotracker.Util
 import com.ufos.ufotracker.databinding.FragmentMainBinding
 import com.ufos.ufotracker.databinding.SightningRowItemBinding

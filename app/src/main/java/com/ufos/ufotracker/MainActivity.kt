@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import com.ufos.ufotracker.data.Repository
+import com.ufos.ufotracker.data.UfoType
 import com.ufos.ufotracker.databinding.ActivityMainBinding
 import com.ufos.ufotracker.ui.main.UfoModulesFragment
 

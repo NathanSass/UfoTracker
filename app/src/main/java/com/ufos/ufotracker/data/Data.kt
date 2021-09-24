@@ -1,4 +1,4 @@
-package com.ufos.ufotracker
+package com.ufos.ufotracker.data
 
 data class SightingData(val timestamp: String, val speedKnots: Int, val type: String)
 
