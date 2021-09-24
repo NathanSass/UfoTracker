@@ -3,7 +3,7 @@
 ### Description
 This project tracks UFO sightings! I focused on implementing the app quickly while considering possible ways to scale.
 
-## How to use
+### How to use
 - Tap plus button in action bar to add a record
 - Long click a cell to show / hide a delete button. Click on delete to delete the cell.
 
