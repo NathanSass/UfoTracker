@@ -1,9 +1,7 @@
-package com.ufos.ufotracker.ui.main
+package com.ufos.ufotracker
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ufos.ufotracker.Repository
-import com.ufos.ufotracker.SightingData
 
 class UfoModulesViewModel : ViewModel() {
 
@@ -11,12 +9,17 @@ class UfoModulesViewModel : ViewModel() {
 
     var sightingTypes: List<String> = emptyList()
 
-    fun requestData() {
+    fun subscribeToData() {
         Repository.sightingData.observeForever { newDatas ->
             val acceptedTypes = newDatas.filter { data ->
                 sightingTypes.contains(data.type)
             }
             sightingsLiveData.value = acceptedTypes
         }
+    }
+
+    fun addNewRecord() {
+        val type = sightingTypes.random()
+        Repository.addNewSighting(type)
     }
 }

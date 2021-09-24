@@ -11,6 +11,15 @@ object Repository {
     fun fetchData() {
         _sightingData.value = Seeds.getSeeds(50)
     }
+
+    fun addNewSighting(type: String) {
+        val data = Seeds.getRandomSightingData().copy(
+            type = type
+        )
+        val datas = _sightingData.value?.toMutableList() ?: mutableListOf()
+        datas.add(0, data)
+        _sightingData.value = datas
+    }
 }
 
 private object Seeds {
@@ -30,8 +39,8 @@ private object Seeds {
 
     fun getRandomSightingData(): SightingData {
         val speed = (1..100000).random()
-        val icon = UfoType.values().random().type
-        return SightingData(getDate(), speed, icon)
+        val type = UfoType.values().random().type
+        return SightingData(getDate(), speed, type)
     }
 
     fun getSeeds(count: Int): List<SightingData> {

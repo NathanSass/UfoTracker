@@ -12,8 +12,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ufos.ufotracker.MainActivity
 import com.ufos.ufotracker.R
 import com.ufos.ufotracker.SightingData
+import com.ufos.ufotracker.UfoModulesViewModel
 import com.ufos.ufotracker.UfoType
 import com.ufos.ufotracker.Util
 import com.ufos.ufotracker.databinding.FragmentMainBinding
@@ -72,11 +74,18 @@ class UfoModulesFragment : Fragment() {
             addItemDecoration(AlienSightingsDecorator(context))
         }
 
-        viewModel.requestData()
+        viewModel.subscribeToData()
 
         viewModel.sightingsLiveData.observe(viewLifecycleOwner, {
             sightingAdapter.items = it
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).binding.addButton.setOnClickListener {
+            viewModel.addNewRecord()
+        }
     }
 
     override fun onDestroyView() {

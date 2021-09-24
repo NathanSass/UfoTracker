@@ -12,7 +12,11 @@ import com.ufos.ufotracker.ui.main.UfoModulesFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
+
+    companion object {
+        val TABS = listOf("STRANGE FLYERS", "MYSTERIOUS LIGHTS")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
 
         TabLayoutMediator(binding.tabs, viewPager) { tab, position ->
-            tab.text = listOf("STRANGE FLYERS", "MYSTERIOUS LIGHTS")[position]
+            tab.text = TABS[position]
         }.attach()
 
         Repository.fetchData()
@@ -38,8 +42,9 @@ class SectionsPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle)
     private val tab1Types = listOf(UfoType.BLOB, UfoType.LAMPSHADE).map { it.type }
     private val tab2Types = listOf(UfoType.MYSTERIOUS_LIGHTS).map { it.type }
     private val tabTypes = listOf(tab1Types, tab2Types)
+
     override fun getItemCount(): Int {
-        return 2
+        return MainActivity.TABS.size
     }
 
     override fun createFragment(position: Int): Fragment {
